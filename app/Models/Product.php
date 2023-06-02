@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Product extends Model
 {
     protected $fillable = [
-        'message',
+        'name',
+        'description',
+        'asking_price',
     ];
 
     protected $dispatchesEvents = [

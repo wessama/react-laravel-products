@@ -33,7 +33,9 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'message' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'asking_price' => 'required|string|max:255',
         ]);
 
         $request->user()->products()->create($validated);
@@ -65,7 +67,9 @@ class ProductController extends Controller
         $this->authorize('update', $product);
 
         $validated = $request->validate([
-            'message' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'asking_price' => 'required|string|max:255',
         ]);
 
         $product->update($validated);

@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useForm, usePage } from '@inertiajs/react';
+import TextInput from "@/Components/TextInput";
 
 dayjs.extend(relativeTime);
 
@@ -14,7 +15,9 @@ export default function Product({ product }) {
     const [editing, setEditing] = useState(false);
 
     const { data, setData, patch, clearErrors, reset, errors } = useForm({
-        message: product.message,
+        name: product.name,
+        description: product.description,
+        asking_price: product.asking_price,
     });
 
     const submit = (e) => {
@@ -56,14 +59,23 @@ export default function Product({ product }) {
                 </div>
                 {editing
                     ? <form onSubmit={submit}>
-                        <textarea value={data.message} onChange={e => setData('message', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
-                        <InputError message={errors.message} className="mt-2" />
+                        <textarea value={data.description} onChange={e => setData('description', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                        <InputError message={errors.description} className="mt-2" />
+                        <TextInput value={data.name} onChange={e => setData('name', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></TextInput>
+                        <InputError message={errors.name} className="mt-2" />
+                        <TextInput value={data.asking_price} onChange={e => setData('asking_price', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></TextInput>
+                        <InputError message={errors.asking_price} className="mt-2" />
                         <div className="space-x-2">
                             <PrimaryButton className="mt-4">Save</PrimaryButton>
                             <button className="mt-4" onClick={() => { setEditing(false); reset(); clearErrors(); }}>Cancel</button>
                         </div>
                     </form>
-                    : <p className="mt-4 text-lg text-gray-900">{product.message}</p>
+                    :
+                    <div>
+                        <p className="mt-4 text-lg text-gray-900">{product.name}</p>
+                        <p className="mt-4 text-lg text-gray-900">{product.description}</p>
+                        <p className="mt-4 text-lg text-gray-900">{product.asking_price}</p>
+                    </div>
                 }
             </div>
         </div>
