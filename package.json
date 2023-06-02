@@ -21,6 +21,8 @@
     },
     "dependencies": {
         "dayjs": "^1.11.7",
+        "laravel-echo": "^1.15.1",
+        "pusher-js": "^8.0.2",
         "react-dnd": "^16.0.1",
         "react-dropzone": "^14.2.3"
     }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import Dropdown from '@/Components/Dropdown';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -7,6 +8,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useForm, usePage } from '@inertiajs/react';
 import TextInput from "@/Components/TextInput";
 import InputLabel from "@/Components/InputLabel.jsx";
+import Echo from 'laravel-echo';
 
 dayjs.extend(relativeTime);
 
@@ -14,6 +16,8 @@ export default function Product({ product }) {
     const { auth } = usePage().props;
 
     const [editing, setEditing] = useState(false);
+
+    const [highestBid, setHighestBid] = useState(product.highest_bid);
 
     const { data, setData, post, patch, clearErrors, reset, errors } = useForm({
         name: product.name,
@@ -29,8 +33,26 @@ export default function Product({ product }) {
 
     const submitBid = (e) => {
         e.preventDefault();
-        post(route('bids.store', { product: product.id }), { onSuccess: () => reset() });
-    }
+        post(route('bids.store', { product: product.id }), {
+            onSuccess: (page) => {
+                const { highestBid } = page.props;
+                setHighestBid(highestBid);
+                reset();
+            },
+        });
+    };
+
+    useEffect(() => {
+        const channel = window.Echo.channel('product.' + product.id);
+
+        channel.listen('.bid.updated', (event) => {
+            setHighestBid(event.highestBid);
+        });
+
+        return () => {
+            channel.stopListening('.bid.updated');
+        };
+    }, [product]);
 
     return (
         <div className="p-6 flex space-x-2">
@@ -42,7 +64,8 @@ export default function Product({ product }) {
                     <div>
                         <span className="text-gray-800">{product.user.name}</span>
                         <small className="ml-2 text-sm text-gray-600">{dayjs(product.created_at).fromNow()}</small>
-                        { product.created_at !== product.updated_at && <small className="text-sm text-gray-600"> &middot; edited</small>}
+                        <small className="ml-2 text-sm text-gray-600">&middot; ${highestBid}</small>
+                        { product.created_at !== product.updated_at && <small className="text-sm text-gray-600"> &middot; edited {dayjs(product.updated_at).fromNow()}</small>}
                     </div>
                     {product.user.id === auth.user.id &&
                         <Dropdown>

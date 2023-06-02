@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BidUpdated;
 use App\Models\Bid;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BidController extends Controller
 {
@@ -33,9 +35,19 @@ class BidController extends Controller
             'value' => 'required|string|max:255',
         ]);
 
-        $product->bids()->create($validated);
+        $bids = $product->bids();
 
-        return redirect(route('products.index'));
+        $currentBid = $validated['value'];
+        if ($currentBid > $product->highest_bid) {
+            event(new BidUpdated($product->id, $currentBid));
+        }
+
+        $bids->create($validated);
+
+        return Inertia::render('Products/Index', [
+            'products' => Product::with('user:id,name')->latest()->get(),
+            'highestBid' => $product->fresh()->highest_bid,
+        ]);
     }
 
     /**

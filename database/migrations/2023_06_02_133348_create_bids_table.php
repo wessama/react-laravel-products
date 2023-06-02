@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->string('value');
+            $table->smallInteger('value');
             $table->timestamps();
         });
     }

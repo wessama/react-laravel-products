@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Str;
 
 class NewProduct extends Notification
 {
@@ -15,7 +16,7 @@ class NewProduct extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Product $chirp)
+    public function __construct(public Product $product)
     {
         //
     }
@@ -38,9 +39,9 @@ class NewProduct extends Notification
         return (new MailMessage)
                     ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))
-                    ->subject("New Product from {$this->chirp->user->name}")
-                    ->greeting("New Product from {$this->chirp->user->name}")
-                    ->line(Str::limit($this->chirp->message, 50))
+                    ->subject("New Product from {$this->product->user->name}")
+                    ->greeting("New Product from {$this->product->user->name}")
+                    ->line(Str::limit($this->product->name, 50))
                     ->action('Go to Chirper', url('/'))
                     ->line('Thank you for using our application!');
     }

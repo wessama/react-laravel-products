@@ -15,6 +15,10 @@ class Product extends Model
         'asking_price',
     ];
 
+    protected $appends = [
+        'highest_bid',
+    ];
+
     protected $dispatchesEvents = [
         'created' => ProductCreated::class,
     ];
@@ -27,5 +31,11 @@ class Product extends Model
     public function bids() : HasMany
     {
         return $this->hasMany(Bid::class);
+    }
+
+    public function getHighestBidAttribute()
+    {
+        $highestBid = $this->bids()->max('value');
+        return $highestBid ?? 0;
     }
 }
