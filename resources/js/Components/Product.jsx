@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useForm, usePage } from '@inertiajs/react';
 import TextInput from "@/Components/TextInput";
+import InputLabel from "@/Components/InputLabel.jsx";
 
 dayjs.extend(relativeTime);
 
@@ -14,16 +15,22 @@ export default function Product({ product }) {
 
     const [editing, setEditing] = useState(false);
 
-    const { data, setData, patch, clearErrors, reset, errors } = useForm({
+    const { data, setData, post, patch, clearErrors, reset, errors } = useForm({
         name: product.name,
         description: product.description,
         asking_price: product.asking_price,
+        value: '',
     });
 
     const submit = (e) => {
         e.preventDefault();
         patch(route('products.update', product.id), { onSuccess: () => setEditing(false) });
     };
+
+    const submitBid = (e) => {
+        e.preventDefault();
+        post(route('bids.store', { product: product.id }), { onSuccess: () => reset() });
+    }
 
     return (
         <div className="p-6 flex space-x-2">
@@ -59,12 +66,18 @@ export default function Product({ product }) {
                 </div>
                 {editing
                     ? <form onSubmit={submit}>
+                        <InputLabel htmlFor="description" value="Description" />
                         <textarea value={data.description} onChange={e => setData('description', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
                         <InputError message={errors.description} className="mt-2" />
+
+                        <InputLabel htmlFor="name" value="Name" className="mt-2" />
                         <TextInput value={data.name} onChange={e => setData('name', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></TextInput>
                         <InputError message={errors.name} className="mt-2" />
+
+                        <InputLabel htmlFor="asking_price" value="Asking Price" className="mt-2" />
                         <TextInput value={data.asking_price} onChange={e => setData('asking_price', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></TextInput>
                         <InputError message={errors.asking_price} className="mt-2" />
+
                         <div className="space-x-2">
                             <PrimaryButton className="mt-4">Save</PrimaryButton>
                             <button className="mt-4" onClick={() => { setEditing(false); reset(); clearErrors(); }}>Cancel</button>
@@ -72,9 +85,30 @@ export default function Product({ product }) {
                     </form>
                     :
                     <div>
-                        <p className="mt-4 text-lg text-gray-900">{product.name}</p>
+                        <InputLabel htmlFor="name" value="Name" className="mt-2" />
                         <p className="mt-4 text-lg text-gray-900">{product.description}</p>
-                        <p className="mt-4 text-lg text-gray-900">{product.asking_price}</p>
+
+                        <InputLabel htmlFor="description" value="Description" className="mt-2" />
+                        <p className="mt-4 text-lg text-gray-900 mt-2">{product.name}</p>
+
+                        <InputLabel htmlFor="asking_price" value="Asking Price" className="mt-2" />
+                        <p className="mt-4 text-lg text-gray-900 mt-2">{product.asking_price}</p>
+
+                        {product.user.id !== auth.user.id &&
+                            <form onSubmit={submitBid}>
+                                <InputLabel htmlFor="your_bid" value="Your bid" className="mt-2"/>
+                                <div className="mb-3 mt-2 pt-0">
+                                    <TextInput type="text"
+                                               placeholder="Bid"
+                                               name="value"
+                                               value={data.value}
+                                               onChange={e => setData('value', e.target.value)}
+                                               className="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
+                                    <InputError message={errors.value} className="mt-2" />
+                                    <PrimaryButton className="mt-4">Bid</PrimaryButton>
+                                </div>
+                            </form>
+                        }
                     </div>
                 }
             </div>
