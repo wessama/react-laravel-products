@@ -20,6 +20,8 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "dayjs": "^1.11.7"
+        "dayjs": "^1.11.7",
+        "react-dnd": "^16.0.1",
+        "react-dropzone": "^14.2.3"
     }
 }
