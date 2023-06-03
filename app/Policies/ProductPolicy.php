@@ -13,7 +13,7 @@ class ProductPolicy
      */
     public function update(User $user, Product $product): bool
     {
-        return $product->user()->is($user);
+        return $product->user()->is($user) || $user->is_admin;
     }
 
     /**
