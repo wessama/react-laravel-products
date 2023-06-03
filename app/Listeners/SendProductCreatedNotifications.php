@@ -24,6 +24,7 @@ class SendProductCreatedNotifications implements ShouldQueue
     public function handle(ProductCreated $event): void
     {
         foreach (User::whereNot('id', $event->product->user_id)->cursor() as $user) {
+            // TODO: Just for demonstration purposes. We don't actually have a mail server handy
             // $user->notify(new NewProduct($event->product));
         }
     }

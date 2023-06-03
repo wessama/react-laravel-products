@@ -37,12 +37,11 @@ class NewProduct extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))
-                    ->subject("New Product from {$this->product->user->name}")
-                    ->greeting("New Product from {$this->product->user->name}")
+                    ->subject("New Product posted by {$this->product->user->name}")
+                    ->greeting("New Product posted by {$this->product->user->name}")
                     ->line(Str::limit($this->product->name, 50))
-                    ->action('Go to Chirper', url('/'))
+                    ->action('Go to Product', url('/'))
                     ->line('Thank you for using our application!');
     }
 

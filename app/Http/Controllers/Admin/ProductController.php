@@ -4,12 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Inertia\Inertia;
 
+/**
+ * In a production application, this would happen via Nova or Filament and there
+ * wouldn't be a need to duplicate the controller and routes for
+ * @see \App\Http\Controllers\ProductController
+ */
 class ProductController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         return Inertia::render('Admin/Products/Index', [
@@ -17,6 +27,9 @@ class ProductController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request, Product $product)
     {
         $validated = $request->validate([
