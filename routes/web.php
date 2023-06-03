@@ -34,10 +34,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('products', \App\Http\Controllers\ProductController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('products', \App\Http\Controllers\ProductController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
 
     Route::post('bids/store/{product}', [\App\Http\Controllers\BidController::class, 'store'])->name('bids.store');
 
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)
+            ->only('index', 'store', 'update', 'destroy');
+    });
+});
+
+Route::middleware('admin')->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)
+            ->only('index', 'store', 'update', 'destroy');
+    });
 });
 
 require __DIR__.'/auth.php';

@@ -36,6 +36,7 @@ class Product extends Model
     public function getHighestBidAttribute()
     {
         $highestBid = $this->bids()->max('value');
+
         return $highestBid ?? 0;
     }
 }

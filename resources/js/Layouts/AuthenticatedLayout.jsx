@@ -24,9 +24,14 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                <NavLink href={route('products.index')} active={route().current('chirps.index')}>
+                                <NavLink href={route('products.index')} active={route().current('products.index')}>
                                     Products
                                 </NavLink>
+                                {user.is_admin &&
+                                    <NavLink href={route('admin.products.index')} active={route().current('admin.products.index')}>
+                                        Admin
+                                    </NavLink>
+                                }
                             </div>
                         </div>
 
@@ -98,7 +103,7 @@ export default function Authenticated({ user, header, children }) {
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('products.index')} active={route().current('chirps.index')}>
+                        <ResponsiveNavLink href={route('products.index')} active={route().current('products.index')}>
                             Products
                         </ResponsiveNavLink>
                     </div>

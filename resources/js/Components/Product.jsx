@@ -8,7 +8,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useForm, usePage } from '@inertiajs/react';
 import TextInput from "@/Components/TextInput";
 import InputLabel from "@/Components/InputLabel.jsx";
-import Echo from 'laravel-echo';
 
 dayjs.extend(relativeTime);
 
@@ -89,13 +88,13 @@ export default function Product({ product }) {
                 </div>
                 {editing
                     ? <form onSubmit={submit}>
-                        <InputLabel htmlFor="description" value="Description" />
-                        <textarea value={data.description} onChange={e => setData('description', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
-                        <InputError message={errors.description} className="mt-2" />
-
                         <InputLabel htmlFor="name" value="Name" className="mt-2" />
                         <TextInput value={data.name} onChange={e => setData('name', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></TextInput>
                         <InputError message={errors.name} className="mt-2" />
+
+                        <InputLabel htmlFor="description" value="Description" />
+                        <textarea value={data.description} onChange={e => setData('description', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                        <InputError message={errors.description} className="mt-2" />
 
                         <InputLabel htmlFor="asking_price" value="Asking Price" className="mt-2" />
                         <TextInput value={data.asking_price} onChange={e => setData('asking_price', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></TextInput>
@@ -108,14 +107,14 @@ export default function Product({ product }) {
                     </form>
                     :
                     <div>
-                        <InputLabel htmlFor="name" value="Name" className="mt-2" />
-                        <p className="mt-4 text-lg text-gray-900">{product.description}</p>
-
-                        <InputLabel htmlFor="description" value="Description" className="mt-2" />
+                        <InputLabel htmlFor="description" value="Name" className="mt-2" />
                         <p className="mt-4 text-lg text-gray-900 mt-2">{product.name}</p>
 
+                        <InputLabel htmlFor="name" value="Description" className="mt-2" />
+                        <p className="mt-4 text-lg text-gray-900">{product.description}</p>
+
                         <InputLabel htmlFor="asking_price" value="Asking Price" className="mt-2" />
-                        <p className="mt-4 text-lg text-gray-900 mt-2">{product.asking_price}</p>
+                        <p className="mt-4 text-lg text-gray-900 mt-2">{'$' + product.asking_price}</p>
 
                         {product.user.id !== auth.user.id &&
                             <form onSubmit={submitBid}>

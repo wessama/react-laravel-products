@@ -1,8 +1,8 @@
 import React from 'react';
+import { useForm, Head } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
-import { useForm, Head } from '@inertiajs/react';
 import Product from "@/Components/Product.jsx";
 import TextInput from "@/Components/TextInput";
 import InputLabel from "@/Components/InputLabel.jsx";
@@ -36,6 +36,7 @@ export default function Index({ auth, products }) {
                         onChange={(e) => setData('name', e.target.value)}
                     />
                     <InputError message={errors.name} className="mt-2" />
+
                     <InputLabel htmlFor="Description" value="Description" className='mt-2' />
                     <textarea
                         value={data.description}
@@ -44,6 +45,7 @@ export default function Index({ auth, products }) {
                         onChange={e => setData('description', e.target.value)}
                     ></textarea>
                     <InputError message={errors.message} className="mt-2" />
+
                     <InputLabel htmlFor="asking_price" value="Asking Price" className='mt-2' />
                     <TextInput
                         id="asking_price"
@@ -55,6 +57,7 @@ export default function Index({ auth, products }) {
                         onChange={(e) => setData('asking_price', e.target.value)}
                     />
                     <InputError message={errors.asking_price} className="mt-2" />
+
                     <PrimaryButton className="mt-4" disabled={processing}>Post</PrimaryButton>
                 </form>
 
