@@ -4,6 +4,10 @@
 
 React/Laravel application to display products and update front-end fields in real-time using Pusher.
 
+Based on the Chirper app from the official [Laravel Bootcamp](https://bootcamp.laravel.com/introduction).
+
+You'll also need a Pusher account. Update `.env` with your credentials.
+
 - `cp .env.example .env`
 - `composer install`
 - `php artisan key:generate`
